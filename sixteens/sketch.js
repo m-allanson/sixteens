@@ -1,10 +1,15 @@
-const scaleFactor = 8;
+const iconSize = 16; // no. of 'pixels' per icon edge
+const iconCount = 6; // no. of icons per canvas edge
+const scaleFactor = 8; // make everything bigger
 
 function setup() {
-  createCanvas(16 * scaleFactor, 16 * scaleFactor);
+  createCanvas(
+    iconSize * scaleFactor * iconCount,
+    iconSize * scaleFactor * iconCount
+  );
 }
 
-function draw() {
+function drawIcon(iconX, iconY) {
   const colours = [
     [random(255), random(255), random(255)],
     [random(255), random(255), random(255)],
@@ -13,15 +18,15 @@ function draw() {
   ];
 
   let choices = [];
-  let halfway = 16 / 2;
+  let halfway = iconSize / 2;
 
-  for (let i = 0; i < 16 * scaleFactor; i = i + scaleFactor) {
+  for (let i = 0; i < iconSize; i++) {
     let row = [];
-    for (let j = 0; j < 16 * scaleFactor; j = j + scaleFactor) {
-      if (j / scaleFactor < halfway) {
+    for (let j = 0; j < iconSize; j++) {
+      if (j < halfway) {
         row.push(int(random(colours.length - 1)));
       } else {
-        const offset = j / scaleFactor - halfway;
+        const offset = j - halfway;
         row.push(row[halfway - offset - 1]);
       }
     }
@@ -29,12 +34,25 @@ function draw() {
     choices.push(...row);
   }
 
-  for (let i = 0; i < 16 * scaleFactor; i = i + scaleFactor) {
-    for (let j = 0; j < 16 * scaleFactor; j = j + scaleFactor) {
-      const colour = colours[choices[i / scaleFactor + j / scaleFactor]];
+  for (let i = 0; i < iconSize; i++) {
+    for (let j = 0; j < iconSize; j++) {
+      const colour = colours[choices[i + j]];
       fill(colour);
       noStroke();
-      rect(i, j, scaleFactor, scaleFactor);
+      rect(
+        iconX + i * scaleFactor,
+        iconY + j * scaleFactor,
+        16 * scaleFactor,
+        16 * scaleFactor
+      );
+    }
+  }
+}
+
+function draw() {
+  for (let i = 0; i < iconCount; i++) {
+    for (let j = 0; j < iconCount; j++) {
+      drawIcon(i * iconSize * scaleFactor, j * iconSize * scaleFactor);
     }
   }
 
