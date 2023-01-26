@@ -1,8 +1,21 @@
-const iconSize = 16; // no. of 'pixels' per icon edge
-const iconCount = 6; // no. of icons per canvas edge
-const scaleFactor = 8; // make everything bigger
+let iconSize = 16; // no. of 'pixels' per icon edge
+let iconCount = 6; // no. of icons per canvas edge
+let scaleFactor = 8; // make everything bigger
+
+const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
+const isNum = (value) => Number(value) === value; // Works because NaN is not equal to NaN.
 
 function setup() {
+  let queryParams = new URLSearchParams(window.location.search);
+
+  let qpIconSize = Number(queryParams?.get("iconSize"));
+  let qpIconCount = Number(queryParams?.get("iconCount"));
+  let qpScaleFactor = Number(queryParams?.get("scaleFactor"));
+
+  iconSize = isNum(qpIconSize) ? qpIconSize : iconSize;
+  iconCount = isNum(qpIconCount) ? qpIconCount : iconCount;
+  scaleFactor = isNum(qpScaleFactor) ? qpScaleFactor : scaleFactor;
+
   createCanvas(
     iconSize * scaleFactor * iconCount,
     iconSize * scaleFactor * iconCount
@@ -42,8 +55,8 @@ function drawIcon(iconX, iconY) {
       rect(
         iconX + i * scaleFactor,
         iconY + j * scaleFactor,
-        16 * scaleFactor,
-        16 * scaleFactor
+        iconSize * scaleFactor,
+        iconSize * scaleFactor
       );
     }
   }
@@ -57,4 +70,26 @@ function draw() {
   }
 
   noLoop();
+}
+
+async function mouseClicked() {
+  if (window.confirm(`Download ${iconCount * iconCount} icons?`)) {
+    let images = [];
+    for (let i = 0; i < iconCount; i++) {
+      for (let j = 0; j < iconCount; j++) {
+        let c = get(
+          i * iconSize * scaleFactor,
+          j * iconSize * scaleFactor,
+          iconSize * scaleFactor,
+          iconSize * scaleFactor
+        );
+        images.push(c);
+      }
+    }
+
+    for (let k = 0; k < images.length; k++) {
+      await sleep(300);
+      images[k].save(`icon0${k}`, "png");
+    }
+  }
 }
