@@ -3,7 +3,7 @@ let iconCount = 6; // no. of icons per canvas edge
 let scaleFactor = 8; // make everything bigger
 
 const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
-const isNum = (value) => Number(value) === value; // Works because NaN is not equal to NaN.
+const isNum = (value) => Number(value) === value && value > 0; // Works because NaN is not equal to NaN.
 
 function setup() {
   let queryParams = new URLSearchParams(window.location.search);
@@ -15,6 +15,10 @@ function setup() {
   iconSize = isNum(qpIconSize) ? qpIconSize : iconSize;
   iconCount = isNum(qpIconCount) ? qpIconCount : iconCount;
   scaleFactor = isNum(qpScaleFactor) ? qpScaleFactor : scaleFactor;
+
+  console.log(
+    `?iconSize=${iconSize}&iconCount=${iconCount}&scaleFactor=${scaleFactor}`
+  );
 
   createCanvas(
     iconSize * scaleFactor * iconCount,
