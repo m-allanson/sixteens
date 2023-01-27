@@ -38,6 +38,7 @@ function setup() {
     `?iconSize=${iconSize}&iconCount=${iconCount}&scaleFactor=${scaleFactor}`
   );
   console.log("Space to refresh, Enter to save all");
+  console.log("View source or check the repo at https://github.com/m-allanson/sixteens")
 
 }
 
