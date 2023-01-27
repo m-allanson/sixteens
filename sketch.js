@@ -1,3 +1,6 @@
+let resetButton;
+let saveButton;
+
 let iconSize = 16; // no. of 'pixels' per icon edge
 let iconCount = 6; // no. of icons per canvas edge
 let scaleFactor = 8; // make everything bigger
@@ -16,14 +19,26 @@ function setup() {
   iconCount = isNum(qpIconCount) ? qpIconCount : iconCount;
   scaleFactor = isNum(qpScaleFactor) ? qpScaleFactor : scaleFactor;
 
-  console.log(
-    `?iconSize=${iconSize}&iconCount=${iconCount}&scaleFactor=${scaleFactor}`
-  );
-
   createCanvas(
     iconSize * scaleFactor * iconCount,
     iconSize * scaleFactor * iconCount
   );
+  
+  noStroke();
+
+  resetButton = createButton("Refresh (Space key)");
+  resetButton.mousePressed(draw);
+  resetButton.parent("buttons");
+
+  saveButton = createButton("Download (Enter key)");
+  saveButton.mousePressed(downloadTheseSquares);
+  saveButton.parent("buttons");
+
+  console.log(
+    `?iconSize=${iconSize}&iconCount=${iconCount}&scaleFactor=${scaleFactor}`
+  );
+  console.log("Space to refresh, Enter to save all");
+
 }
 
 function drawIcon(iconX, iconY) {
@@ -55,7 +70,6 @@ function drawIcon(iconX, iconY) {
     for (let j = 0; j < iconSize; j++) {
       const colour = colours[choices[i + j]];
       fill(colour);
-      noStroke();
       rect(
         iconX + i * scaleFactor,
         iconY + j * scaleFactor,
@@ -76,7 +90,15 @@ function draw() {
   noLoop();
 }
 
-async function mouseClicked() {
+function keyPressed() {
+  if (keyCode === 13) {
+    downloadTheseSquares();
+  } else if (keyCode === 32) {
+    draw();
+  }
+}
+
+async function downloadTheseSquares() {
   if (window.confirm(`Download ${iconCount * iconCount} icons?`)) {
     let images = [];
     for (let i = 0; i < iconCount; i++) {
@@ -92,7 +114,7 @@ async function mouseClicked() {
     }
 
     for (let k = 0; k < images.length; k++) {
-      await sleep(300);
+      await sleep(100);
       images[k].save(`icon0${k}`, "png");
     }
   }
