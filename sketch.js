@@ -3,10 +3,58 @@ let saveButton;
 
 let iconSize = 16; // no. of 'pixels' per icon edge
 let iconCount = 6; // no. of icons per canvas edge
-let scaleFactor = 8; // make everything bigger
+let scaleFactor = 8; // make everything bigger (or smaller)
 
 const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 const isNum = (value) => Number(value) === value && value > 0; // Works because NaN is not equal to NaN.
+
+const strategies = {
+  // noop: (r) => r,
+  rotateLeft: (r) => {
+    r.push(r.shift());
+    return r;
+  },
+  rotateRight: (r) => {
+    r.unshift(r.pop());
+    return r;
+  },
+  mirror: (r) => {
+    const ends = [r.shift(), r.pop()];
+    r.splice(r.length / 2, 0, ...ends);
+    return r;
+  },
+  mirrorInverse: (r) => {
+    const middle = r.splice(r.length / 2 - 2, 4);
+    r.unshift(middle[2]);
+    r.unshift(middle[3]);
+    r.push(middle[0]);
+    r.push(middle[1]);
+    return r;
+  },
+  mirrorMore: (r) => {
+    const bigEnds = [
+      r.shift(),
+      r.shift(),
+      r.shift(),
+      r.pop(),
+      r.pop(),
+      r.pop(),
+    ];
+    r.splice(r.length / 2, 0, ...bigEnds);
+    return r;
+  },
+  marching: (r) => {
+    let step = 0;
+    for (let i = 0; i < r.length; i++) {
+      step += r.length / 4;
+      if (step >= r.length) step = 0;
+      let [a, b] = [r[i], r[step]];
+      r[i] = b;
+      r[step] = a;
+    }
+    return r;
+  },
+};
 
 function setup() {
   let queryParams = new URLSearchParams(window.location.search);
@@ -23,7 +71,7 @@ function setup() {
     iconSize * scaleFactor * iconCount,
     iconSize * scaleFactor * iconCount
   );
-  
+
   noStroke();
 
   resetButton = createButton("Refresh (Space key)");
@@ -38,44 +86,51 @@ function setup() {
     `?iconSize=${iconSize}&iconCount=${iconCount}&scaleFactor=${scaleFactor}`
   );
   console.log("Space to refresh, Enter to save all");
-  console.log("View source or check the repo at https://github.com/m-allanson/sixteens")
-
+  console.log(
+    "View source or check the repo at https://github.com/m-allanson/sixteens"
+  );
 }
 
 function drawIcon(iconX, iconY) {
-  const colours = [
-    [random(255), random(255), random(255)],
-    [random(255), random(255), random(255)],
-    [0, 0, 0],
-    [0, 0, 0],
-  ];
+  const availableStrategies = Object.keys(strategies);
+  const picked = int(random(availableStrategies.length));
+  const strategy = strategies[availableStrategies[picked]];
+  let strategyRepeat = int(random(1, 3));
 
-  let choices = [];
-  let halfway = iconSize / 2;
+  // console.log(
+  //   "USING: ",
+  //   availableStrategies[picked],
+  //   "with REPEATS: ",
+  //   strategyRepeat
+  // );
 
+  let row = [];
+
+  const cm = new ColorMaker({});
+  cm.newPalette(int(random(3, 6))); // Use a variable quantity of colours
+  const colours = cm.palette;
+
+  // Fill the row with random colours
   for (let i = 0; i < iconSize; i++) {
-    let row = [];
-    for (let j = 0; j < iconSize; j++) {
-      if (j < halfway) {
-        row.push(int(random(colours.length - 1)));
-      } else {
-        const offset = j - halfway;
-        row.push(row[halfway - offset - 1]);
-      }
-    }
-
-    choices.push(...row);
+    row.push(int(random(colours.length)));
   }
 
+  let nextRow = [...row];
+
   for (let i = 0; i < iconSize; i++) {
+    // Modify the row each time for interesting patterns
+    for (let repeat = 0; repeat < strategyRepeat; repeat++) {
+      nextRow = strategy(nextRow);
+    }
+
+    // Draw the row
     for (let j = 0; j < iconSize; j++) {
-      const colour = colours[choices[i + j]];
-      fill(colour);
+      cm.fill(colours[nextRow[j]]);
       rect(
-        iconX + i * scaleFactor,
-        iconY + j * scaleFactor,
-        iconSize * scaleFactor,
-        iconSize * scaleFactor
+        iconX + j * scaleFactor,
+        iconY + i * scaleFactor,
+        iconSize / 2,
+        iconSize / 2
       );
     }
   }
