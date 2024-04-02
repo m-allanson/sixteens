@@ -1,3 +1,6 @@
+const KEYCODE_D = 68;
+const KEYCODE_R = 82;
+
 let resetButton;
 let saveButton;
 
@@ -75,18 +78,21 @@ function setup() {
 
   noStroke();
 
-  resetButton = createButton("Refresh (Space key)");
+  resetButton = createButton("Refresh (r key)");
   resetButton.mousePressed(draw);
   resetButton.parent("buttons");
 
-  saveButton = createButton("Download (Enter key)");
+  saveButton = createButton("Download (d key)");
   saveButton.mousePressed(downloadTheseSquares);
   saveButton.parent("buttons");
+
+  describe(
+    "A set of square icons, each with a randomly generated colour palette and pattern. There are two buttons. One creates a new set of random icons, the other downloads each icon as a png file."
+  );
 
   console.log(
     `?iconSize=${iconSize}&iconCount=${iconCount}&scaleFactor=${scaleFactor}`
   );
-  console.log("Space to refresh, Enter to save all");
   console.log(
     "View source or check the repo at https://github.com/m-allanson/sixteens"
   );
@@ -148,12 +154,10 @@ function draw() {
 }
 
 function keyPressed() {
-  if (keyCode === 13) {
+  if (keyCode === KEYCODE_D) {
     downloadTheseSquares();
-    return false;
-  } else if (keyCode === 32) {
+  } else if (keyCode === KEYCODE_R) {
     draw();
-    return false;
   }
 }
 

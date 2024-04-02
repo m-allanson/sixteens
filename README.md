@@ -4,7 +4,7 @@
 
 Randomly generated 16x16 icons.
 
-Press enter key to download the icons. Press space key for a fresh set of icons.
+Click the button or press `r` to download the icons. Click the other button or press `space` for a fresh set of icons.
 
 ![Screenshot](screenshot.png)
 
