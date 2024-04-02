@@ -150,8 +150,10 @@ function draw() {
 function keyPressed() {
   if (keyCode === 13) {
     downloadTheseSquares();
+    return false;
   } else if (keyCode === 32) {
     draw();
+    return false;
   }
 }
 
