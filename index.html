@@ -6,21 +6,29 @@
     <link rel="icon" type="image/png" href="./favicon.png" />
     <title>Sixteens - Randomly generated icons</title>
     <style>
+      * {
+        box-sizing: border-box;
+      }
+
+      html,
       body {
+        height: 100%;
         padding: 0;
-        margin: 0 auto;
-        background-color: #1b1b1b;
+        margin: 0;
+      }
+
+      #canvas {
+        margin: 1rem auto;
         text-align: center;
       }
 
       #buttons {
-        box-sizing: border-box;
         display: flex;
         justify-content: space-between;
-        padding: 1rem;
-        position: absolute;
-        bottom: 0;
-        width: 100vw;
+        padding-inline: 1rem;
+        position: fixed;
+        bottom: 1rem;
+        width: 100%;
       }
     </style>
     <script src="./vendor/p5.min.js"></script>
@@ -29,7 +37,9 @@
   </head>
 
   <body>
-    <main></main>
-    <section id="buttons"></section>
+    <main>
+      <section id="canvas"></section>
+      <section id="buttons"></section>
+    </main>
   </body>
 </html>

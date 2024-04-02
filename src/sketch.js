@@ -67,10 +67,11 @@ function setup() {
   iconCount = isNum(qpIconCount) ? qpIconCount : iconCount;
   scaleFactor = isNum(qpScaleFactor) ? qpScaleFactor : scaleFactor;
 
-  createCanvas(
+  const canvas = createCanvas(
     iconSize * scaleFactor * iconCount,
     iconSize * scaleFactor * iconCount
   );
+  canvas.parent("canvas");
 
   noStroke();
 
