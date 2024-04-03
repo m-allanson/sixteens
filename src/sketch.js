@@ -27,11 +27,9 @@ const strategies = {
     return r;
   },
   mirrorInverse: (r) => {
-    const middle = r.splice(r.length / 2 - 2, 4);
-    r.unshift(middle[2]);
-    r.unshift(middle[3]);
+    const middle = r.splice(r.length / 2 - 1, 2);
+    r.unshift(middle[1]);
     r.push(middle[0]);
-    r.push(middle[1]);
     return r;
   },
   mirrorMore: (r) => {
@@ -49,7 +47,7 @@ const strategies = {
   marching: (r) => {
     let step = 0;
     for (let i = 0; i < r.length; i++) {
-      step += r.length / 4;
+      step += int(r.length / 4);
       if (step >= r.length) step = 0;
       let [a, b] = [r[i], r[step]];
       r[i] = b;
