@@ -4,7 +4,7 @@
 
 Randomly generated 16x16 icons.
 
-Click the button or press `r` to download the icons. Click the other button or press `space` for a fresh set of icons.
+There are two buttons, one will generate a fresh set of icons, the other will download the current set of icons as individual images.
 
 ![Screenshot](screenshot.png)
 
@@ -53,3 +53,4 @@ Thanks to:
 - [p5.js](https://github.com/processing/p5.js)
 - [ColorMaker](https://github.com/julienlabat/colormaker) for the palettes
 - this article https://www.freecodecamp.org/news/how-to-create-generative-art-in-less-than-100-lines-of-code-d37f379859f/
+- [Yoto Mini](https://uk.yotoplay.com/yoto-mini) - the inspiration for this sketch was to create sets of distinct icons for displaying on Yoto Mini playlists.
